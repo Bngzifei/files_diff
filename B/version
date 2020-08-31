@@ -1,0 +1,26 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+然后你在里面加一行：
+
+IP   niukou.com
+
+保存退出，然后重启机器，这时候你就可以通过hostname来访问这台机器的服务了
+
+
+
+查看主机名：
+
+uname -n //单独主机名
+
+uname -a  //详细信息
+
+将centos7原主机名改为自己想要的那个样子
+
+1、方法一使用hostnamectl命令
+
+hostnamectl set-hostname  自己想要的名字
+2、方法二：修改配置文件  /etc/hostname 保存退出
+
+vi /etc/hostname
+修改里面的名字成自己想要的那个，保存退出

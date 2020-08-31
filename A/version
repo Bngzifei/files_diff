@@ -1,0 +1,14 @@
+centos 7 修改host文件
+centos7与之前的版本都不一样，修改主机名在/ect/hostname 和/ect/hosts 这两个文件控制
+
+首先修改/etc/hostname
+
+vi /etc/hostname
+
+打开之后的内容是：
+
+localhost.localdomain
+
+把它修改成你想要的名字就可以，比如： niukou.com
+
+保存退出
