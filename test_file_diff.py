@@ -10,6 +10,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
 from file_diff_cmp import DEFAULT_IGNORES, FileCompDiff
+import filecmp
 
 
 class FileComparer:
@@ -88,7 +89,7 @@ class FileComparer:
                     time.sleep(1)
 
     def save_diff_xlsx_report(self, path, path1, path2, pkg_name1, pkg_name2):
-        """比较两个pkg:冲突检测,最后生成冲突文件的html格式报告"""
+        """生成表格"""
         # version文件不进行比较
         DEFAULT_IGNORES.append("version")
         diff_obj = FileCompDiff(path1, path2, ignore=DEFAULT_IGNORES)
@@ -115,6 +116,8 @@ class FileComparer:
 
         pd_obj = pandas.DataFrame(infos)
         pd_obj.to_excel("A与B文件差异表.xlsx", index=None)
+
+
 def main():
     comparer = FileComparer()
     path = os.path.join(os.getcwd(), "doc")
