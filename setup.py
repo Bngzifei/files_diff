@@ -2,16 +2,16 @@
 
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='file-diff',
-    version="1.0.0",
+    version="1.0.3",
     description=(
         'Specifies the tool for text content difference detection in the directory'
     ),
-    long_description=open('README.md', 'r').read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     author='zifeiyushui8',
     author_email='bngzifei@gmail.com',
@@ -20,6 +20,7 @@ setup(
     license='MIT License',
     packages=find_packages(),
     platforms=["all"],
+    include_package_data=True,
     url='https://github.com/Bngzifei/files_diff.git',
     classifiers=[
         'Development Status :: 4 - Beta',
