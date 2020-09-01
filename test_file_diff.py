@@ -4,6 +4,8 @@ import sys
 import time
 import difflib
 
+import pandas
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
@@ -49,7 +51,7 @@ class FileComparer:
             print("The file on {}".format(fp_path))
 
     def comp_file_content_diff(self, path, file1, file2, pkg_name1, pkg_name2):
-        """比较两个文件内容的差异"""
+        """比较两个文件内容的差异:二进制文件无法进行下面的html报告生成"""
         tf1 = self.read_file(file1)
         tf2 = self.read_file(file2)
         tf1_case = bool(tf1 == 2)
@@ -80,11 +82,39 @@ class FileComparer:
                 for file_path in file_paths:
                     fileA = "/".join([pathA, file_path])
                     fileB = "/".join([pathB, file_path])
+                    # 二进制文件无法进行下面的html报告生成
                     self.comp_file_content_diff(path, fileA, fileB,
                                                 pkg_name1, pkg_name2)
                     time.sleep(1)
 
+    def save_diff_xlsx_report(self, path, path1, path2, pkg_name1, pkg_name2):
+        """比较两个pkg:冲突检测,最后生成冲突文件的html格式报告"""
+        # version文件不进行比较
+        DEFAULT_IGNORES.append("version")
+        diff_obj = FileCompDiff(path1, path2, ignore=DEFAULT_IGNORES)
+        diff_infos = diff_obj.rec_report_full_closure()
+        infos = list()
+        if diff_infos:
+            for diff_info in diff_infos:
+                dir_path = [k for k in diff_info.keys()][0]
+                pathA = dir_path.split(" Diff-To ")[0]
+                pathB = dir_path.split(" Diff-To ")[1]
 
+                file_paths = [v for v in diff_info.values()][0]
+                for file_path in file_paths:
+                    fileA = "/".join([pathA, file_path])
+                    fileB = "/".join([pathB, file_path])
+                    info = {
+                        "A": "5.8.5-5.9.0-security",
+                        "B": "custom-vpc-999018091801",
+                        "冲突文件": file_path,
+                        "A冲突文件位置": fileA,
+                        "B冲突文件位置": fileB,
+                    }
+                    infos.append(info)
+
+        pd_obj = pandas.DataFrame(infos)
+        pd_obj.to_excel("A与B文件差异表.xlsx", index=None)
 def main():
     comparer = FileComparer()
     path = os.path.join(os.getcwd(), "doc")
@@ -92,7 +122,7 @@ def main():
     path2 = r"D:\git_pro\files_diff\B"
     pkg_name1 = "A"
     pkg_name2 = "B"
-    comparer.save_diff_ret_html(path, path1, path2, pkg_name1, pkg_name2)
+    comparer.save_diff_xlsx_report(path, path1, path2, pkg_name1, pkg_name2)
 
 
 if __name__ == '__main__':
