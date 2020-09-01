@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='file-diff',
-    version="1.0.3",
+    version="1.0.4",
     description=(
         'Specifies the tool for text content difference detection in the directory'
     ),
